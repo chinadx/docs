@@ -1,0 +1,30 @@
+将Apache添加为Linux的服务
+
+　　如果想将httpd列入系统自动启动的服务，可以直接将上述的apachectl文件拷贝到 /etc/rc.d/init.d 中，命令如下：
+
+　　cp /usr/local/apache2/bin/apachectl /etc/rc.d/init.d/httpd
+
+      然后在相应的启动级别如3、5中加入链接即可（具体办法如下）。
+　　ln -s /etc/rc.d/init.d/httpd /etc/rc.d/rc3.d/S61httpd
+
+　　链接文件的S61是启动时的序号。当init.d目录下有httpd脚本后，我们就可以通过service命令来启动关闭apache了。在任意路径下执行：
+
+　　service httpd start | stop | restart
+
+　　脚本中没有输入提示信息，但命令已经执行了。这时有个问题就是：虽然apache已经可以自动启动，但在linux的服务列表中却看不到它，比如运行 ntsysv或红帽子的chkconfig --list指令。要添加服务，一般通过chkconfig --add xxx来实现，但需要脚本中有相应的信息才行，否则chkconfig就会提示：xxx 服务不支持 chkconfig。所以我们首先编辑/etc/rc.d/init.d/httpd脚本，在第2行添加如下注释信息：
+
+　　# chkconfig: 35 61 61
+　　# description: Apache
+
+　　第一行的3个参数意义分别为：在哪些运行级别启动httpd（3，5）；启动序号（S61）；关闭序号（K61）。注意：第二行的描述必须要写！
+
+　　保存后执行：chkconfig --add httpd
+
+
+　　就将httpd添加入服务了。在rc3.d、rc5.d路径中将来就会出现S61httpd的链接，其他运行级别路径中会出现K61httpd的链接。
+
+　　运行chkconfig --list就可以看到httpd的服务了。
+
+ 
+
+      同理，如果想将新安装的其他服务添加到系统服务中实现自启动，按照上面的步骤套公式就可以了。

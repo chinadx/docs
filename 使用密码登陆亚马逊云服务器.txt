@@ -1,0 +1,25 @@
+ 使用密码登陆Amazon EC2
+2012-05-13 00:27:42
+标签：amazon ec2
+ec2:https://console.aws.amazon.com/ec2/
+用的是亚马逊推荐的系统：
+AMI: amzn-ami-pv-2012.03.1.x86_64-ebs (ami-e78cd4a2)
+ 
+创建instance后，会有一个pem的key
+使用该密钥登陆到服务器上后，默认用户名为
+ec2-user
+直接修改root密码
+$sudo passwd root
+重复输入密码
+ 
+然后切换到root
+$su -
+#
+修改/etc/ssh/sshd_config
+找到 PasswordAuthentication no，把no改成yes
+接下来，要重新启动下sshd
+/sbin/service sshd restart
+ 
+再为原来的”ec2-user”添加登录密码。如下命令：
+passwd ec2-user
+按提示，两次输入密码。
