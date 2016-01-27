@@ -1,0 +1,1691 @@
+From: =?gb2312?B?0tHTySBJbnRlcm5ldCBFeHBsb3JlciAxMSCxo7Tm?=
+Subject: Apache Tomcat 7 (7.0.67) - SSL/TLS Configuration HOW-TO
+Date: Wed, 27 Jan 2016 13:02:34 +0800
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----=_NextPart_000_0000_01D15902.FD363590"
+X-MimeOLE: Produced By Microsoft MimeOLE V6.1.7601.17609
+
+这是 MIME 格式的多方邮件。
+
+------=_NextPart_000_0000_01D15902.FD363590
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><META content=3D"IE=3D5.0000" =
+http-equiv=3D"X-UA-Compatible">
+
+<META http-equiv=3D"Content-Type"=20
+content=3D"text/html; charset=3Diso-8859-1"><TITLE>Apache Tomcat 7 =
+(7.0.67) -=20
+SSL/TLS Configuration HOW-TO</TITLE>
+<META name=3D"author" content=3D"Christopher Cain">
+<META name=3D"author" content=3D"Yoav Shapira">
+<STYLE type=3D"text/css" media=3D"print">=0A=
+    .noPrint {display: none;}=0A=
+    td#mainBody {width: 100%;}=0A=
+</STYLE>
+
+<STYLE type=3D"text/css">=0A=
+code {background-color:rgb(224,255,255);padding:0 0.1em;}=0A=
+code.attributeName, code.propertyName {background-color:transparent;}=0A=
+=0A=
+=0A=
+table {=0A=
+  border-collapse: collapse;=0A=
+  text-align: left;=0A=
+}=0A=
+table *:not(table) {=0A=
+  /* Prevent border-collapsing for table child elements like <div> */=0A=
+  border-collapse: separate;=0A=
+}=0A=
+=0A=
+th {=0A=
+  text-align: left;=0A=
+}=0A=
+=0A=
+=0A=
+div.codeBox pre code, code.attributeName, code.propertyName, =
+code.noHighlight, .noHighlight code {=0A=
+  background-color: transparent;=0A=
+}=0A=
+div.codeBox {=0A=
+  overflow: auto;=0A=
+  margin: 1em 0;=0A=
+}=0A=
+div.codeBox pre {=0A=
+  margin: 0;=0A=
+  padding: 4px;=0A=
+  border: 1px solid #999;=0A=
+  border-radius: 5px;=0A=
+  background-color: #eff8ff;=0A=
+  display: table; /* To prevent <pre>s from taking the complete =
+available width. */=0A=
+  /*=0A=
+  When it is officially supported, use the following CSS instead of =
+display: table=0A=
+  to prevent big <pre>s from exceeding the browser window:=0A=
+  max-width: available;=0A=
+  width: min-content;=0A=
+  */=0A=
+}=0A=
+=0A=
+div.codeBox pre.wrap {=0A=
+  white-space: pre-wrap;=0A=
+}=0A=
+=0A=
+=0A=
+table.defaultTable tr, table.detail-table tr {=0A=
+    border: 1px solid #CCC;=0A=
+}=0A=
+=0A=
+table.defaultTable tr:nth-child(even), table.detail-table =
+tr:nth-child(even) {=0A=
+    background-color: #FAFBFF;=0A=
+}=0A=
+=0A=
+table.defaultTable tr:nth-child(odd), table.detail-table =
+tr:nth-child(odd) {=0A=
+    background-color: #EEEFFF;=0A=
+}=0A=
+=0A=
+table.defaultTable th, table.detail-table th {=0A=
+  background-color: #88b;=0A=
+  color: #fff;=0A=
+}=0A=
+=0A=
+table.defaultTable th, table.defaultTable td, table.detail-table th, =
+table.detail-table td {=0A=
+  padding: 5px 8px;=0A=
+}=0A=
+=0A=
+=0A=
+p.notice {=0A=
+    border: 1px solid rgb(255, 0, 0);=0A=
+    background-color: rgb(238, 238, 238);=0A=
+    color: rgb(0, 51, 102);=0A=
+    padding: 0.5em;=0A=
+    margin: 1em 2em 1em 1em;=0A=
+}=0A=
+</STYLE>
+
+<META name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.18163"></HEAD>
+<BODY text=3D"#000000" bgcolor=3D"#ffffff" link=3D"#525d76" =
+alink=3D"#525d76" vlink=3D"#525d76">
+<TABLE width=3D"100%" border=3D"0" cellspacing=3D"0"><!--PAGE HEADER-->
+  <TBODY>
+  <TR>
+    <TD><!--PROJECT LOGO--><A href=3D"http://tomcat.apache.org/"><IMG =
+align=3D"right"=20
+      alt=3D"&#10;      The Apache Tomcat Servlet/JSP Container&#10;    =
+" src=3D"http://tomcat.apache.org/tomcat-7.0-doc/images/tomcat.gif"=20
+      border=3D"0"></A></TD>
+    <TD>
+      <H1><FONT face=3D"arial,helvetica,sanserif">Apache Tomcat =
+7</FONT></H1><FONT=20
+      face=3D"arial,helvetica,sanserif">Version 7.0.67, Dec 7 =
+2015</FONT></TD>
+    <TD><!--APACHE LOGO--><A href=3D"http://www.apache.org/"><IMG =
+align=3D"right"=20
+      alt=3D"Apache Logo" =
+src=3D"http://tomcat.apache.org/tomcat-7.0-doc/images/asf-logo.gif"=20
+      border=3D"0"></A></TD></TR></TBODY></TABLE>
+<TABLE width=3D"100%" border=3D"0" cellspacing=3D"4"><!--HEADER =
+SEPARATOR-->
+  <TBODY>
+  <TR>
+    <TD colspan=3D"2">
+      <HR size=3D"1" noshade=3D"">
+    </TD></TR>
+  <TR><!--LEFT SIDE NAVIGATION-->
+    <TD width=3D"20%" class=3D"noPrint" nowrap=3D"" valign=3D"top">
+      <P><STRONG>Links</STRONG></P>
+      <UL>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/index.html">Docs=20
+        Home</A></LI>
+        <LI><A href=3D"http://wiki.apache.org/tomcat/FAQ">FAQ</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html#comments_s=
+ection">User=20
+        Comments</A></LI></UL>
+      <P><STRONG>User Guide</STRONG></P>
+      <UL>
+        <LI><A=20
+        =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/introduction.html">1)=20
+        Introduction</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/setup.html">2)=20
+        Setup</A></LI>
+        <LI><A=20
+        =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/appdev/index.html">3)=20
+        First webapp</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/deployer-howto.html">4)=20
+        Deployer</A></LI>
+        <LI><A=20
+        =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/manager-howto.html">5)=20
+        Manager</A></LI>
+        <LI><A=20
+        =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/realm-howto.html">6)=20
+        Realms and AAA</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/security-manager-howto.ht=
+ml">7)=20
+        Security Manager</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/jndi-resources-howto.html=
+">8)=20
+        JNDI Resources</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/jndi-datasource-examples-=
+howto.html">9)=20
+        JDBC DataSources</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/class-loader-howto.html">=
+10)=20
+        Classloading</A></LI>
+        <LI><A=20
+        =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/jasper-howto.html">11)=20
+        JSPs</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html">12)=20
+        SSL/TLS</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/ssi-howto.html">13)=20
+        SSI</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/cgi-howto.html">14)=20
+        CGI</A></LI>
+        <LI><A=20
+        =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/proxy-howto.html">15)=20
+        Proxy Support</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/mbeans-descriptor-howto.h=
+tml">16)=20
+        MBean Descriptor</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/default-servlet.html">17)=
+=20
+        Default Servlet</A></LI>
+        <LI><A=20
+        =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/cluster-howto.html">18)=20
+        Clustering</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/balancer-howto.html">19) =
+
+        Load Balancer</A></LI>
+        <LI><A=20
+        =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/connectors.html">20)=20
+        Connectors</A></LI>
+        <LI><A=20
+        =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/monitoring.html">21)=20
+        Monitoring and Management</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/logging.html">22)=20
+        Logging</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/apr.html">23)=20
+        APR/Native</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/virtual-hosting-howto.htm=
+l">24)=20
+        Virtual Hosting</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/aio.html">25)=20
+        Advanced IO</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/extras.html">26)=20
+        Additional Components</A></LI>
+        <LI><A=20
+        =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/maven-jars.html">27)=20
+        Mavenized</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/security-howto.html">28) =
+
+        Security Considerations</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/windows-service-howto.htm=
+l">29)=20
+        Windows Service</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/windows-auth-howto.html">=
+30)=20
+        Windows Authentication</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.html">31)=20
+        Tomcat's JDBC Pool</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/web-socket-howto.html">32=
+)=20
+        WebSocket</A></LI></UL>
+      <P><STRONG>Reference</STRONG></P>
+      <UL>
+        <LI><A=20
+        =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/RELEASE-NOTES.txt">Releas=
+e=20
+        Notes</A></LI>
+        <LI><A=20
+        =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/config/index.html">Config=
+uration</A></LI>
+        <LI><A=20
+        =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/api/index.html">Tomcat=20
+        Javadocs</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/servletapi/index.html">Se=
+rvlet=20
+        Javadocs</A></LI>
+        <LI><A=20
+        =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/jspapi/index.html">JSP =
+2.2=20
+        Javadocs</A></LI>
+        <LI><A=20
+        =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/elapi/index.html">EL 2.2 =
+
+        Javadocs</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/websocketapi/index.html">=
+WebSocket=20
+        1.1 Javadocs</A></LI>
+        <LI><A href=3D"http://tomcat.apache.org/connectors-doc/">JK 1.2=20
+        Documentation</A></LI></UL>
+      <P><STRONG>Apache Tomcat Development</STRONG></P>
+      <UL>
+        <LI><A=20
+        =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/building.html">Building</=
+A></LI>
+        <LI><A=20
+        =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/changelog.html">Changelog=
+</A></LI>
+        <LI><A=20
+        =
+href=3D"http://wiki.apache.org/tomcat/TomcatVersions">Status</A></LI>
+        <LI><A=20
+        =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/developers.html">Develope=
+rs</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/architecture/index.html">=
+Architecture</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/funcspecs/index.html">Fun=
+ctional=20
+        Specs.</A></LI>
+        <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/tribes/introduction.html"=
+>Tribes</A></LI></UL></TD><!--RIGHT SIDE MAIN BODY-->
+    <TD width=3D"80%" align=3D"left" id=3D"mainBody" valign=3D"top">
+      <H1>SSL/TLS Configuration HOW-TO</H1>
+      <TABLE border=3D"0" cellspacing=3D"0" cellpadding=3D"2">
+        <TBODY>
+        <TR>
+          <TD bgcolor=3D"#525d76"><FONT color=3D"#ffffff" =
+face=3D"arial,helvetica.sanserif"><A=20
+            name=3D"Table of Contents"><!--()--></A><A=20
+            name=3D"Table_of_Contents"><STRONG>Table of=20
+            Contents</STRONG></A></FONT></TD></TR>
+        <TR>
+          <TD>
+            <BLOCKQUOTE>
+              <UL>
+                <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html#Quick_Star=
+t">Quick=20
+                Start</A></LI>
+                <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html#Introducti=
+on_to_SSL">Introduction=20
+                to SSL/TLS</A></LI>
+                <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html#SSL_and_To=
+mcat">SSL/TLS=20
+                and Tomcat</A></LI>
+                <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html#Certificat=
+es">Certificates</A></LI>
+                <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html#General_Ti=
+ps_on_Running_SSL">General=20
+                Tips on Running SSL</A></LI>
+                <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html#Configurat=
+ion">Configuration</A>
+                <OL>
+                  <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html#Prepare_th=
+e_Certificate_Keystore">Prepare=20
+                  the Certificate Keystore</A></LI>
+                  <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html#Edit_the_T=
+omcat_Configuration_File">Edit=20
+                  the Tomcat Configuration File</A></LI></OL></LI>
+                <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html#Installing=
+_a_Certificate_from_a_Certificate_Authority">Installing=20
+                a Certificate from a Certificate Authority</A>
+                <OL>
+                  <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html#Create_a_l=
+ocal_Certificate_Signing_Request_(CSR)">Create=20
+                  a local Certificate Signing Request (CSR)</A></LI>
+                  <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html#Importing_=
+the_Certificate">Importing=20
+                  the Certificate</A></LI></OL></LI>
+                <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html#Troublesho=
+oting">Troubleshooting</A></LI>
+                <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html#Using_the_=
+SSL_for_session_tracking_in_your_application">Using=20
+                the SSL for session tracking in your =
+application</A></LI>
+                <LI><A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html#Miscellane=
+ous_Tips_and_Bits">Miscellaneous=20
+                Tips and =
+Bits</A></LI></UL></BLOCKQUOTE></TD></TR></TBODY></TABLE>
+      <TABLE border=3D"0" cellspacing=3D"0" cellpadding=3D"2">
+        <TBODY>
+        <TR>
+          <TD bgcolor=3D"#525d76"><FONT color=3D"#ffffff" =
+face=3D"arial,helvetica.sanserif"><A=20
+            name=3D"Quick Start"><!--()--></A><A =
+name=3D"Quick_Start"><STRONG>Quick=20
+            Start</STRONG></A></FONT></TD></TR>
+        <TR>
+          <TD>
+            <BLOCKQUOTE>
+              <BLOCKQUOTE><EM>
+                <P>The description below uses the variable name =
+$CATALINA_BASE=20
+                to refer the    base directory against which most =
+relative paths=20
+                are resolved. If you have    not configured Tomcat for =
+multiple=20
+                instances by setting a CATALINA_BASE    directory, then=20
+                $CATALINA_BASE will be set to the value of =
+$CATALINA_HOME,   =20
+                the directory into which you have installed=20
+              Tomcat.</P></EM></BLOCKQUOTE>
+              <P>To install and configure SSL/TLS support on Tomcat, you =
+need to=20
+              follow these simple steps.  For more information, read the =
+rest of=20
+              this HOW-TO.</P>
+              <OL>
+                <LI>Create a keystore file to store the server's private =
+key and
+                 self-signed certificate by executing the following =
+command:=20
+                <P>Windows:</P>
+                <DIV class=3D"codeBox">
+<PRE><CODE>"%JAVA_HOME%\bin\keytool" -genkey -alias tomcat -keyalg =
+RSA</CODE></PRE></DIV>
+                <P>Unix:</P>
+                <DIV class=3D"codeBox">
+<PRE><CODE>$JAVA_HOME/bin/keytool -genkey -alias tomcat -keyalg =
+RSA</CODE></PRE></DIV>
+                <P>and specify a password value of "changeit".</P></LI>
+                <LI>
+                <P>Uncomment the "SSL HTTP/1.1 Connector" entry in    =20
+                <CODE>$CATALINA_BASE/conf/server.xml</CODE> and modify =
+as=20
+                described in    the <A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html#Configurat=
+ion">Configuration=20
+                section</A> =
+below.</P></LI></OL></BLOCKQUOTE></TD></TR></TBODY></TABLE>
+      <TABLE border=3D"0" cellspacing=3D"0" cellpadding=3D"2">
+        <TBODY>
+        <TR>
+          <TD bgcolor=3D"#525d76"><FONT color=3D"#ffffff" =
+face=3D"arial,helvetica.sanserif"><A=20
+            name=3D"Introduction_to_SSL"><STRONG>Introduction to=20
+            SSL/TLS</STRONG></A></FONT></TD></TR>
+        <TR>
+          <TD>
+            <BLOCKQUOTE>
+              <P>Transport Layer Security (TLS) and its predecessor, =
+Secure=20
+              Sockets Layer (SSL), are technologies which allow web =
+browsers and=20
+              web servers to communicate over a secured connection.  =
+This means=20
+              that the data being sent is encrypted by one side, =
+transmitted,=20
+              then decrypted by the other side before processing. This =
+is a=20
+              two-way process, meaning that both the server AND the =
+browser=20
+              encrypt all traffic before sending out data.</P>
+              <P>Another important aspect of the SSL/TLS protocol is=20
+              Authentication.  This means that during your initial =
+attempt to=20
+              communicate with a web server over a secure connection, =
+that=20
+              server will present your web browser with a set of =
+credentials, in=20
+              the form of a "Certificate", as proof the site is who and =
+what it=20
+              claims to be.  In certain cases, the server may also =
+request a=20
+              Certificate from your web browser, asking for proof that=20
+              <EM>you</EM> are who you claim to be.  This is known as =
+"Client=20
+              Authentication," although in practice this is used more =
+for=20
+              business-to-business (B2B) transactions than with =
+individual
+               users.  Most SSL-enabled web servers do not request =
+Client=20
+              Authentication.</P></BLOCKQUOTE></TD></TR></TBODY></TABLE>
+      <TABLE border=3D"0" cellspacing=3D"0" cellpadding=3D"2">
+        <TBODY>
+        <TR>
+          <TD bgcolor=3D"#525d76"><FONT color=3D"#ffffff" =
+face=3D"arial,helvetica.sanserif"><A=20
+            name=3D"SSL_and_Tomcat"><STRONG>SSL/TLS and=20
+          Tomcat</STRONG></A></FONT></TD></TR>
+        <TR>
+          <TD>
+            <BLOCKQUOTE>
+              <P>It is important to note that configuring Tomcat to take =
+
+              advantage of secure sockets is usually only necessary when =
+running=20
+              it as a stand-alone web server.  Details can be found in =
+the <A=20
+              =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/security-howto.html">Secu=
+rity=20
+              Considerations Document</A>. When running Tomcat primarily =
+as a=20
+              Servlet/JSP container behind another web server, such as =
+Apache or=20
+              Microsoft IIS, it is usually necessary to configure the =
+primary=20
+              web server to handle the SSL connections from users. =
+Typically,=20
+              this server will negotiate all SSL-related functionality, =
+then
+               pass on any requests destined for the Tomcat container =
+only after=20
+              decrypting those requests.  Likewise, Tomcat will return =
+cleartext=20
+              responses, that will be encrypted before being returned to =
+the=20
+              user's browser.  In this environment, Tomcat knows that=20
+              communications between the primary web server and the =
+client are=20
+              taking place over a secure connection (because your =
+application
+               needs to be able to ask about this), but it does not =
+participate=20
+              in the encryption or decryption=20
+        itself.</P></BLOCKQUOTE></TD></TR></TBODY></TABLE>
+      <TABLE border=3D"0" cellspacing=3D"0" cellpadding=3D"2">
+        <TBODY>
+        <TR>
+          <TD bgcolor=3D"#525d76"><FONT color=3D"#ffffff" =
+face=3D"arial,helvetica.sanserif"><A=20
+            =
+name=3D"Certificates"><STRONG>Certificates</STRONG></A></FONT></TD></TR>
+        <TR>
+          <TD>
+            <BLOCKQUOTE>
+              <P>In order to implement SSL, a web server must have an =
+associated=20
+              Certificate for each external interface (IP address) that =
+accepts=20
+              secure connections. The theory behind this design is that =
+a server=20
+              should provide some kind of reasonable assurance that its =
+owner is=20
+              who you think it is, particularly before receiving any =
+sensitive=20
+              information.  While a broader explanation of Certificates =
+is=20
+              beyond the scope of this document, think of a Certificate =
+as a=20
+              "digital driver's license" for an Internet address.  It =
+states=20
+              what company the site is associated with, along with some =
+basic=20
+              contact information about the site owner or =
+administrator.</P>
+              <P>This "driver's license" is cryptographically signed by =
+its=20
+              owner, and is therefore extremely difficult for anyone =
+else to=20
+              forge.  For sites involved in e-commerce, or any other =
+business=20
+              transaction in which authentication of identity is =
+important, a=20
+              Certificate is typically purchased from a well-known=20
+              <EM>Certificate Authority</EM> (CA) such as VeriSign or =
+Thawte. =20
+              Such certificates can be electronically verified -- in =
+effect, the=20
+              Certificate Authority will vouch for the authenticity of =
+the=20
+              certificates that it grants, so you can believe that the=20
+              Certificate is valid if you trust the Certificate =
+Authority that=20
+              granted it.</P>
+              <P>In many cases, however, authentication is not really a =
+concern.=20
+               An administrator may simply want to ensure that the data =
+being=20
+              transmitted and received by the server is private and =
+cannot be=20
+              snooped by anyone who may be eavesdropping on the =
+connection. =20
+              Fortunately, Java provides a relatively simple =
+command-line tool,=20
+              called <CODE>keytool</CODE>, which can easily create a=20
+              "self-signed" Certificate.  Self-signed Certificates are =
+simply=20
+              user generated Certificates which have not been officially =
+
+              registered with any well-known CA, and are therefore not =
+really=20
+              guaranteed to be authentic at all. Again, this may or may =
+not even=20
+              be important, depending on your=20
+      needs.</P></BLOCKQUOTE></TD></TR></TBODY></TABLE>
+      <TABLE border=3D"0" cellspacing=3D"0" cellpadding=3D"2">
+        <TBODY>
+        <TR>
+          <TD bgcolor=3D"#525d76"><FONT color=3D"#ffffff" =
+face=3D"arial,helvetica.sanserif"><A=20
+            name=3D"General Tips on Running SSL"><!--()--></A><A =
+name=3D"General_Tips_on_Running_SSL"><STRONG>General=20
+            Tips on Running SSL</STRONG></A></FONT></TD></TR>
+        <TR>
+          <TD>
+            <BLOCKQUOTE>
+              <P>The first time a user attempts to access a secured page =
+on your=20
+              site, he or she is typically presented with a dialog =
+containing=20
+              the details of the certificate (such as the company and =
+contact=20
+              name), and asked if he or she wishes to accept the =
+Certificate as=20
+              valid and continue with the transaction. Some browsers =
+will=20
+              provide an option for permanently accepting a given =
+Certificate as=20
+              valid, in which case the user will not be bothered with a =
+prompt=20
+              each time they visit your site.  Other browsers do not =
+provide=20
+              this option.  Once approved by the user, a Certificate =
+will be=20
+              considered valid for at least the entire browser =
+session.</P>
+              <P>Also, while the SSL protocol was designed to be as =
+efficient as=20
+              securely possible, encryption/decryption is a =
+computationally=20
+              expensive process from a performance standpoint.  It is =
+not=20
+              strictly necessary to run an entire web application over =
+SSL, and=20
+              indeed a developer can pick and choose which pages require =
+a=20
+              secure connection and which do not.  For a reasonably busy =
+site,=20
+              it is customary to only run certain pages under SSL, =
+namely those
+               pages where sensitive information could possibly be =
+exchanged. =20
+              This would include things like login pages, personal =
+information=20
+              pages, and shopping cart checkouts, where credit card =
+information=20
+              could possibly be transmitted. Any page within an =
+application can=20
+              be requested over a secure socket by simply prefixing the =
+address=20
+              with <CODE>https:</CODE> instead of <CODE>http:</CODE>.  =
+Any pages=20
+              which absolutely <STRONG>require</STRONG> a secure =
+connection=20
+              should check the protocol type associated with the page =
+request=20
+              and take the appropriate action if <CODE>https</CODE> is =
+not
+               specified.</P>
+              <P>Finally, using name-based virtual hosts on a secured =
+connection=20
+              can be problematic.  This is a design limitation of the =
+SSL=20
+              protocol itself.  The SSL handshake, where the client =
+browser=20
+              accepts the server certificate, must occur before the HTTP =
+request=20
+              is accessed.  As a result, the request information =
+containing the=20
+              virtual host name cannot be determined prior to =
+authentication,
+               and it is therefore not possible to assign multiple =
+certificates=20
+              to a single IP address.  If all virtual hosts on a single =
+IP=20
+              address need to authenticate against the same certificate, =
+the=20
+              addition of multiple virtual hosts should not interfere =
+with=20
+              normal SSL operations on the server.  Be aware, however, =
+that most=20
+              client browsers will compare the server's domain name =
+against the=20
+              domain name listed in the certificate, if any (applicable=20
+              primarily to official, CA-signed certificates).  If the =
+domain=20
+              names do not match, these browsers will display a warning =
+to the=20
+              client user.  In general, only address-based virtual hosts =
+are=20
+              commonly used with SSL in a production=20
+          environment.</P></BLOCKQUOTE></TD></TR></TBODY></TABLE>
+      <TABLE border=3D"0" cellspacing=3D"0" cellpadding=3D"2">
+        <TBODY>
+        <TR>
+          <TD bgcolor=3D"#525d76"><FONT color=3D"#ffffff" =
+face=3D"arial,helvetica.sanserif"><A=20
+            =
+name=3D"Configuration"><STRONG>Configuration</STRONG></A></FONT></TD></TR=
+>
+        <TR>
+          <TD>
+            <BLOCKQUOTE>
+              <TABLE border=3D"0" cellspacing=3D"0" cellpadding=3D"2">
+                <TBODY>
+                <TR>
+                  <TD bgcolor=3D"#828da6"><FONT color=3D"#ffffff" =
+face=3D"arial,helvetica.sanserif"><A=20
+                    name=3D"Prepare the Certificate =
+Keystore"><!--()--></A><A=20
+                    =
+name=3D"Prepare_the_Certificate_Keystore"><STRONG>Prepare the=20
+                    Certificate Keystore</STRONG></A></FONT></TD></TR>
+                <TR>
+                  <TD>
+                    <BLOCKQUOTE>
+                      <P>Tomcat currently operates only on =
+<CODE>JKS</CODE>,=20
+                      <CODE>PKCS11</CODE> or <CODE>PKCS12</CODE> format=20
+                      keystores.  The <CODE>JKS</CODE> format is Java's =
+standard=20
+                      "Java KeyStore" format, and is the format created =
+by the=20
+                      <CODE>keytool</CODE> command-line utility.  This =
+tool is=20
+                      included in the JDK. The <CODE>PKCS12</CODE> =
+format is an=20
+                      internet standard, and can be manipulated via =
+(among other=20
+                      things) OpenSSL and Microsoft's Key-Manager. </P>
+                      <P>Each entry in a keystore is identified by an =
+alias=20
+                      string. Whilst many keystore implementations treat =
+aliases=20
+                      in a case insensitive manner, case sensitive=20
+                      implementations are available. The =
+<CODE>PKCS11</CODE>=20
+                      specification, for example, requires that aliases =
+are case=20
+                      sensitive. To avoid issues related to the case =
+sensitivity=20
+                      of aliases, it is not recommended to use aliases =
+that
+                       differ only in case. </P>
+                      <P>To import an existing certificate into a=20
+                      <CODE>JKS</CODE> keystore, please read the =
+documentation=20
+                      (in your JDK documentation package) about=20
+                      <CODE>keytool</CODE>. Note that OpenSSL often adds =
+
+                      readable comments before the key, but =
+<CODE>keytool</CODE>=20
+                      does not support that. So if your certificate has =
+comments=20
+                      before the key data, remove them before importing =
+the=20
+                      certificate with <CODE>keytool</CODE>. </P>
+                      <P>To import an existing certificate signed by =
+your own CA=20
+                      into a <CODE>PKCS12</CODE> keystore using OpenSSL =
+you=20
+                      would execute a command like:</P>
+                      <DIV class=3D"codeBox">
+<PRE><CODE>openssl pkcs12 -export -in mycert.crt -inkey mykey.key=0A=
+                        -out mycert.p12 -name tomcat -CAfile myCA.crt=0A=
+                        -caname root -chain</CODE></PRE></DIV>
+                      <P>For more advanced cases, consult the <A =
+href=3D"http://www.openssl.org/"=20
+                      rel=3D"nofollow">OpenSSL documentation</A>.</P>
+                      <P>To create a new <CODE>JKS</CODE> keystore from =
+scratch,=20
+                      containing a single self-signed Certificate, =
+execute the=20
+                      following from a terminal command line:</P>
+                      <P>Windows:</P>
+                      <DIV class=3D"codeBox">
+<PRE><CODE>"%JAVA_HOME%\bin\keytool" -genkey -alias tomcat -keyalg =
+RSA</CODE></PRE></DIV>
+                      <P>Unix:</P>
+                      <DIV class=3D"codeBox">
+<PRE><CODE>$JAVA_HOME/bin/keytool -genkey -alias tomcat -keyalg =
+RSA</CODE></PRE></DIV>
+                      <P>(The RSA algorithm should be preferred as a =
+secure=20
+                      algorithm, and this also ensures general =
+compatibility=20
+                      with other servers and components.)</P>
+                      <P>This command will create a new file, in the =
+home=20
+                      directory of the user under which you run it, =
+named=20
+                      "<CODE>.keystore</CODE>".  To specify a different =
+location=20
+                      or filename, add the <CODE>-keystore</CODE> =
+parameter,
+                       followed by the complete pathname to your =
+keystore file,
+                       to the <CODE>keytool</CODE> command shown above.  =
+You=20
+                      will also need to reflect this new location in the =
+
+                      <CODE>server.xml</CODE> configuration file, as =
+described=20
+                      later.  For example:</P>
+                      <P>Windows:</P>
+                      <DIV class=3D"codeBox">
+<PRE><CODE>"%JAVA_HOME%\bin\keytool" -genkey -alias tomcat -keyalg RSA=0A=
+  -keystore \path\to\my\keystore</CODE></PRE></DIV>
+                      <P>Unix:</P>
+                      <DIV class=3D"codeBox">
+<PRE><CODE>$JAVA_HOME/bin/keytool -genkey -alias tomcat -keyalg RSA=0A=
+  -keystore /path/to/my/keystore</CODE></PRE></DIV>
+                      <P>After executing this command, you will first be =
+
+                      prompted for the keystore password.  The default =
+password=20
+                      used by Tomcat is "<CODE>changeit</CODE>" (all =
+lower=20
+                      case), although you can specify a custom password =
+if you=20
+                      like. You will also need to specify the custom =
+password in=20
+                      the <CODE>server.xml</CODE> configuration file, as =
+
+                      described later.</P>
+                      <P>Next, you will be prompted for general =
+information=20
+                      about this Certificate, such as company, contact =
+name, and=20
+                      so on.  This information will be displayed to =
+users who=20
+                      attempt to access a secure page in your =
+application, so=20
+                      make sure that the information provided here =
+matches what=20
+                      they will expect.</P>
+                      <P>Finally, you will be prompted for the <EM>key=20
+                      password</EM>, which is the password specifically =
+for this=20
+                      Certificate (as opposed to any other Certificates =
+stored=20
+                      in the same keystore file). The =
+<CODE>keytool</CODE>=20
+                      prompt will tell you that pressing the ENTER key=20
+                      automatically uses the same password for the key =
+as the=20
+                      keystore. You are free to use the same password or =
+to=20
+                      select a custom one. If you select a different =
+password to=20
+                      the keystore password, you will also need to =
+specify the=20
+                      custom password in the <CODE>server.xml</CODE>
+                       configuration file.</P>
+                      <P>If everything was successful, you now have a =
+keystore=20
+                      file with a Certificate that can be used by your=20
+                      server.</P></BLOCKQUOTE></TD></TR></TBODY></TABLE>
+              <TABLE border=3D"0" cellspacing=3D"0" cellpadding=3D"2">
+                <TBODY>
+                <TR>
+                  <TD bgcolor=3D"#828da6"><FONT color=3D"#ffffff" =
+face=3D"arial,helvetica.sanserif"><A=20
+                    name=3D"Edit the Tomcat Configuration =
+File"><!--()--></A><A=20
+                    =
+name=3D"Edit_the_Tomcat_Configuration_File"><STRONG>Edit the=20
+                    Tomcat Configuration =
+File</STRONG></A></FONT></TD></TR>
+                <TR>
+                  <TD>
+                    <BLOCKQUOTE>
+                      <P>Tomcat can use two different implementations of =
+SSL:=20
+                      <UL>
+                        <LI>the JSSE implementation provided as part of =
+the Java=20
+                        runtime (since 1.4)</LI>
+                        <LI>the APR implementation, which uses the =
+OpenSSL=20
+                        engine by default.</LI></UL>The exact =
+configuration=20
+                      details depend on which implementation is being =
+used. If=20
+                      you configured Connector by specifying generic=20
+                      <CODE>protocol=3D"HTTP/1.1"</CODE> then the =
+implementation=20
+                      used by Tomcat is chosen automatically. If the=20
+                      installation uses <A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/apr.html">APR</A>
+                       - i.e. you have installed the Tomcat native =
+library -
+                       then it will use the APR SSL implementation, =
+otherwise it=20
+                      will use the Java JSSE implementation.=20
+                      <P></P>
+                      <P>As configuration attributes for SSL support=20
+                      significantly differ between APR vs. JSSE =
+implementations,=20
+                      it is <STRONG>recommended</STRONG> to avoid =
+auto-selection=20
+                      of implementation. It is done by specifying a =
+classname in=20
+                      the <B>protocol</B> attribute of the <A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/config/http.html">Connect=
+or</A>.</P>
+                      <P>To define a Java (JSSE) connector, regardless =
+of=20
+                      whether the APR library is loaded or not, use one =
+of the=20
+                      following:</P>
+                      <DIV class=3D"codeBox">
+<PRE><CODE>&lt;!-- Define a HTTP/1.1 Connector on port 8443, JSSE NIO =
+implementation --&gt;=0A=
+&lt;Connector protocol=3D"org.apache.coyote.http11.Http11NioProtocol"=0A=
+           port=3D"8443" .../&gt;=0A=
+=0A=
+&lt;!-- Define a HTTP/1.1 Connector on port 8443, JSSE BIO =
+implementation --&gt;=0A=
+&lt;Connector protocol=3D"org.apache.coyote.http11.Http11Protocol"=0A=
+           port=3D"8443" .../&gt;</CODE></PRE></DIV>
+                      <P>Alternatively, to specify an APR connector (the =
+APR=20
+                      library must be available) use:</P>
+                      <DIV class=3D"codeBox">
+<PRE><CODE>&lt;!-- Define a HTTP/1.1 Connector on port 8443, APR =
+implementation --&gt;=0A=
+&lt;Connector protocol=3D"org.apache.coyote.http11.Http11AprProtocol"=0A=
+           port=3D"8443" .../&gt;</CODE></PRE></DIV>
+                      <P>If you are using APR, you have the option of=20
+                      configuring an alternative engine to OpenSSL.=20
+                      <DIV class=3D"codeBox">
+<PRE><CODE>=0A=
+&lt;Listener className=3D"org.apache.catalina.core.AprLifecycleListener"=0A=
+          SSLEngine=3D"someengine" SSLRandomSeed=3D"somedevice" /&gt;=0A=
+</CODE></PRE></DIV>
+                      The default value is=20
+                      <DIV class=3D"codeBox">
+<PRE><CODE>=0A=
+&lt;Listener className=3D"org.apache.catalina.core.AprLifecycleListener"=0A=
+          SSLEngine=3D"on" SSLRandomSeed=3D"builtin" /&gt;=0A=
+</CODE></PRE></DIV>
+                      So to use SSL under APR, make sure the SSLEngine =
+attribute=20
+                      is set to something other than <CODE>off</CODE>. =
+The=20
+                      default value is <CODE>on</CODE> and if you =
+specify=20
+                      another value, it has to be a valid engine name.=20
+                      <P></P>
+                      <P>SSLRandomSeed allows to specify a source of =
+entropy.=20
+                      Productive system needs a reliable source of =
+entropy but=20
+                      entropy may need a lot of time to be collected =
+therefore=20
+                      test systems could use no blocking entropy sources =
+like=20
+                      "/dev/urandom" that will allow quicker starts of =
+Tomcat.=20
+                      </P>
+                      <P>The final step is to configure the Connector in =
+the=20
+                      <CODE>$CATALINA_BASE/conf/server.xml</CODE> file, =
+where=20
+                      <CODE>$CATALINA_BASE</CODE> represents the base =
+directory=20
+                      for the Tomcat instance.  An example=20
+                      <CODE>&lt;Connector&gt;</CODE> element for an SSL=20
+                      connector is included in the default=20
+                      <CODE>server.xml</CODE> file installed with =
+Tomcat.  To=20
+                      configure an SSL connector that uses JSSE, you =
+will need=20
+                      to remove the comments and edit it so it looks =
+something=20
+                      like this:</P>
+                      <DIV class=3D"codeBox">
+<PRE><CODE>=0A=
+&lt;!-- Define a SSL Coyote HTTP/1.1 Connector on port 8443 --&gt;=0A=
+&lt;Connector=0A=
+           protocol=3D"org.apache.coyote.http11.Http11NioProtocol"=0A=
+           port=3D"8443" maxThreads=3D"200"=0A=
+           scheme=3D"https" secure=3D"true" SSLEnabled=3D"true"=0A=
+           keystoreFile=3D"${user.home}/.keystore" =
+keystorePass=3D"changeit"=0A=
+           clientAuth=3D"false" sslProtocol=3D"TLS"/&gt;=0A=
+</CODE></PRE></DIV>
+                      <P>  The APR connector uses different attributes =
+for many=20
+                      SSL settings,  particularly keys and certificates. =
+An=20
+                      example of an APR configuration is:=20
+                      <DIV class=3D"codeBox">
+<PRE><CODE>=0A=
+&lt;!-- Define a SSL Coyote HTTP/1.1 Connector on port 8443 --&gt;=0A=
+&lt;Connector=0A=
+           protocol=3D"org.apache.coyote.http11.Http11AprProtocol"=0A=
+           port=3D"8443" maxThreads=3D"200"=0A=
+           scheme=3D"https" secure=3D"true" SSLEnabled=3D"true"=0A=
+           SSLCertificateFile=3D"/usr/local/ssl/server.crt"=0A=
+           SSLCertificateKeyFile=3D"/usr/local/ssl/server.pem"=0A=
+           SSLVerifyClient=3D"optional" =
+SSLProtocol=3D"TLSv1+TLSv1.1+TLSv1.2"/&gt;=0A=
+</CODE></PRE></DIV>
+                      <P></P>
+                      <P>The configuration options and information on =
+which=20
+                      attributes are mandatory, are documented in the =
+SSL=20
+                      Support section of the <A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/config/http.html#SSL =
+Support">HTTP=20
+                      connector</A> configuration reference. Make sure =
+that you=20
+                      use the correct attributes for the connector you =
+are=20
+                      using. The BIO and NIO connectors use JSSE whereas =
+the=20
+                      APR/native connector uses APR.</P>
+                      <P>The <CODE>port</CODE> attribute is the TCP/IP =
+port=20
+                      number on which Tomcat will listen for secure =
+connections.=20
+                       You can change this to any port number you wish =
+(such as=20
+                      to the default port for <CODE>https</CODE> =
+communications,=20
+                      which is 443).  However, special setup (outside =
+the scope=20
+                      of this document) is necessary to run Tomcat on =
+port
+                       numbers lower than 1024 on many operating =
+systems.</P>
+                      <BLOCKQUOTE><EM>
+                        <P>If you change the port number here, you =
+should also=20
+                        change the  value specified for the=20
+                        <CODE>redirectPort</CODE> attribute on the  =
+non-SSL=20
+                        connector.  This allows Tomcat to automatically =
+redirect=20
+                         users who attempt to access a page with a =
+security=20
+                        constraint specifying  that SSL is required, as =
+required=20
+                        by the Servlet =
+Specification.</P></EM></BLOCKQUOTE>
+                      <P>After completing these configuration changes, =
+you must=20
+                      restart Tomcat as you normally do, and you should =
+be in=20
+                      business.  You should be able to access any web=20
+                      application supported by Tomcat via SSL.  For =
+example,=20
+                      try:</P>
+                      <DIV class=3D"codeBox">
+<PRE><CODE>https://localhost:8443/</CODE></PRE></DIV>
+                      <P>and you should see the usual Tomcat splash page =
+(unless=20
+                      you have modified the ROOT web application).  If =
+this does=20
+                      not work, the following section contains some=20
+                      troubleshooting=20
+            =
+tips.</P></BLOCKQUOTE></TD></TR></TBODY></TABLE></BLOCKQUOTE></TD></TR></=
+TBODY></TABLE>
+      <TABLE border=3D"0" cellspacing=3D"0" cellpadding=3D"2">
+        <TBODY>
+        <TR>
+          <TD bgcolor=3D"#525d76"><FONT color=3D"#ffffff" =
+face=3D"arial,helvetica.sanserif"><A=20
+            name=3D"Installing a Certificate from a Certificate =
+Authority"><!--()--></A><A=20
+            =
+name=3D"Installing_a_Certificate_from_a_Certificate_Authority"><STRONG>In=
+stalling=20
+            a Certificate from a Certificate =
+Authority</STRONG></A></FONT></TD></TR>
+        <TR>
+          <TD>
+            <BLOCKQUOTE>
+              <P>To obtain and install a Certificate from a Certificate=20
+              Authority (like verisign.com, thawte.com or =
+trustcenter.de), read=20
+              the previous section and then follow these =
+instructions:</P>
+              <TABLE border=3D"0" cellspacing=3D"0" cellpadding=3D"2">
+                <TBODY>
+                <TR>
+                  <TD bgcolor=3D"#828da6"><FONT color=3D"#ffffff" =
+face=3D"arial,helvetica.sanserif"><A=20
+                    name=3D"Create a local Certificate Signing Request =
+(CSR)"><!--()--></A><A=20
+                    =
+name=3D"Create_a_local_Certificate_Signing_Request_(CSR)"><STRONG>Create =
+
+                    a local Certificate Signing Request=20
+                  (CSR)</STRONG></A></FONT></TD></TR>
+                <TR>
+                  <TD>
+                    <BLOCKQUOTE>
+                      <P>In order to obtain a Certificate from the =
+Certificate=20
+                      Authority of your choice you have to create a so =
+called=20
+                      Certificate Signing Request (CSR). That CSR will =
+be used
+                       by the Certificate Authority to create a =
+Certificate that=20
+                      will identify your website as "secure". To create =
+a CSR=20
+                      follow these steps:</P>
+                      <UL>
+                        <LI>Create a local self-signed Certificate (as =
+described=20
+                        in the previous section):    =20
+                        <DIV class=3D"codeBox">
+<PRE><CODE>keytool -genkey -alias tomcat -keyalg RSA=0A=
+    -keystore &lt;your_keystore_filename&gt;</CODE></PRE></DIV>=20
+                           Note: In some cases you will have to enter =
+the domain=20
+                        of your website (i.e. =
+<CODE>www.myside.org</CODE>)    in=20
+                        the field "first- and lastname" in order to =
+create a=20
+                        working Certificate. </LI>
+                        <LI>The CSR is then created with:    =20
+                        <DIV class=3D"codeBox">
+<PRE><CODE>keytool -certreq -keyalg RSA -alias tomcat -file certreq.csr=0A=
+    -keystore =
+&lt;your_keystore_filename&gt;</CODE></PRE></DIV></LI></UL>
+                      <P>Now you have a file called =
+<CODE>certreq.csr</CODE>=20
+                      that you can submit to the Certificate Authority =
+(look at=20
+                      the documentation of the Certificate Authority =
+website on=20
+                      how to do this). In return you get a=20
+                    =
+Certificate.</P></BLOCKQUOTE></TD></TR></TBODY></TABLE>
+              <TABLE border=3D"0" cellspacing=3D"0" cellpadding=3D"2">
+                <TBODY>
+                <TR>
+                  <TD bgcolor=3D"#828da6"><FONT color=3D"#ffffff" =
+face=3D"arial,helvetica.sanserif"><A=20
+                    name=3D"Importing the Certificate"><!--()--></A><A =
+name=3D"Importing_the_Certificate"><STRONG>Importing=20
+                    the Certificate</STRONG></A></FONT></TD></TR>
+                <TR>
+                  <TD>
+                    <BLOCKQUOTE>
+                      <P>Now that you have your Certificate you can =
+import it=20
+                      into you local keystore. First of all you have to =
+import a=20
+                      so called Chain Certificate or Root Certificate =
+into your=20
+                      keystore. After that you can proceed with =
+importing your=20
+                      Certificate.</P>
+                      <UL>
+                        <LI>Download a Chain Certificate from the =
+Certificate=20
+                        Authority you obtained the Certificate from.<BR> =
+   For=20
+                        Verisign.com commercial certificates go to:      =
+     =20
+                        =
+http://www.verisign.com/support/install/intermediate.html<BR>=20
+                               For Verisign.com trial certificates go =
+to:       =20
+                           =20
+                        =
+http://www.verisign.com/support/verisign-intermediate-ca/Trial_Secure_Ser=
+ver_Root/index.html<BR>=20
+                           For Trustcenter.de go to:           =20
+                        =
+http://www.trustcenter.de/certservices/cacerts/en/en.htm#server<BR>=20
+                           For Thawte.com go to:           =20
+                        =
+http://www.thawte.com/certs/trustmap.html<BR></LI>
+                        <LI>Import the Chain Certificate into your =
+keystore    =20
+                        <DIV class=3D"codeBox">
+<PRE><CODE>keytool -import -alias root -keystore =
+&lt;your_keystore_filename&gt;=0A=
+    -trustcacerts -file =
+&lt;filename_of_the_chain_certificate&gt;</CODE></PRE></DIV></LI>
+                        <LI>And finally import your new Certificate    =20
+                        <DIV class=3D"codeBox">
+<PRE><CODE>keytool -import -alias tomcat -keystore =
+&lt;your_keystore_filename&gt;=0A=
+    -file =
+&lt;your_certificate_filename&gt;</CODE></PRE></DIV></LI></UL></BLOCKQUOT=
+E></TD></TR></TBODY></TABLE></BLOCKQUOTE></TD></TR></TBODY></TABLE>
+      <TABLE border=3D"0" cellspacing=3D"0" cellpadding=3D"2">
+        <TBODY>
+        <TR>
+          <TD bgcolor=3D"#525d76"><FONT color=3D"#ffffff" =
+face=3D"arial,helvetica.sanserif"><A=20
+            =
+name=3D"Troubleshooting"><STRONG>Troubleshooting</STRONG></A></FONT></TD>=
+</TR>
+        <TR>
+          <TD>
+            <BLOCKQUOTE>
+              <P>Here is a list of common problems that you may =
+encounter when=20
+              setting up SSL communications, and what to do about =
+them.</P>
+              <UL>
+                <LI>When Tomcat starts up, I get an exception like   =20
+                "java.io.FileNotFoundException: =
+{some-directory}/{some-file} not=20
+                found".    =20
+                <BLOCKQUOTE>
+                  <P>A likely explanation is that Tomcat cannot find the =
+
+                  keystore file    where it is looking.  By default, =
+Tomcat=20
+                  expects the keystore file to    be named=20
+                  <CODE>.keystore</CODE> in the user home directory =
+under which =20
+                    Tomcat is running (which may or may not be the same =
+as yours=20
+                  :-).  If    the keystore file is anywhere else, you =
+will need=20
+                  to add a     <CODE>keystoreFile</CODE> attribute to =
+the=20
+                  <CODE>&lt;Factory&gt;</CODE>    element in the <A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html#Edit the =
+Tomcat Configuration File">Tomcat=20
+                     configuration file</A>.</P></BLOCKQUOTE></LI>
+                <LI>When Tomcat starts up, I get an exception like   =20
+                "java.io.FileNotFoundException:  Keystore was tampered =
+with, or =20
+                  password was incorrect".    =20
+                <BLOCKQUOTE>
+                  <P>Assuming that someone has not <EM>actually</EM> =
+tampered=20
+                  with    your keystore file, the most likely cause is =
+that=20
+                  Tomcat is using    a different password than the one =
+you used=20
+                  when you created the    keystore file.  To fix this, =
+you can=20
+                  either go back and     <A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html#Prepare =
+the Certificate Keystore">recreate=20
+                  the keystore    file</A>, or you can add or update the =
+
+                  <CODE>keystorePass</CODE>    attribute on the=20
+                  <CODE>&lt;Connector&gt;</CODE> element in the     <A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html#Edit the =
+Tomcat Configuration File">Tomcat=20
+                  configuration    file</A>.  <STRONG>REMINDER</STRONG> =
+-=20
+                  Passwords are case sensitive!</P></BLOCKQUOTE></LI>
+                <LI>When Tomcat starts up, I get an exception like   =20
+                "java.net.SocketException: SSL handshake error=20
+                javax.net.ssl.SSLException: No    available certificate =
+or key=20
+                corresponds to the SSL cipher suites which are    =
+enabled."    =20
+                <BLOCKQUOTE>
+                  <P>A likely explanation is that Tomcat cannot find the =
+alias=20
+                  for the server    key within the specified keystore. =
+Check=20
+                  that the correct     <CODE>keystoreFile</CODE> and=20
+                  <CODE>keyAlias</CODE> are specified in the    =20
+                  <CODE>&lt;Connector&gt;</CODE> element in the     <A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html#Edit the =
+Tomcat Configuration File">Tomcat=20
+                  configuration file</A>.     <STRONG>REMINDER</STRONG> =
+-=20
+                  <CODE>keyAlias</CODE> values may be case   =20
+                sensitive!</P></BLOCKQUOTE></LI></UL>
+              <P>If you are still having problems, a good source of =
+information=20
+              is the <STRONG>TOMCAT-USER</STRONG> mailing list.  You can =
+find=20
+              pointers to archives of previous messages on this list, as =
+well as=20
+              subscription and unsubscription information, at <A =
+href=3D"http://tomcat.apache.org/lists.html">http://tomcat.apache.org/lis=
+ts.html</A>.</P></BLOCKQUOTE></TD></TR></TBODY></TABLE>
+      <TABLE border=3D"0" cellspacing=3D"0" cellpadding=3D"2">
+        <TBODY>
+        <TR>
+          <TD bgcolor=3D"#525d76"><FONT color=3D"#ffffff" =
+face=3D"arial,helvetica.sanserif"><A=20
+            name=3D"Using the SSL for session tracking in your =
+application"><!--()--></A><A=20
+            =
+name=3D"Using_the_SSL_for_session_tracking_in_your_application"><STRONG>U=
+sing=20
+            the SSL for session tracking in your=20
+          application</STRONG></A></FONT></TD></TR>
+        <TR>
+          <TD>
+            <BLOCKQUOTE>
+              <P>This is a new feature in the Servlet 3.0 specification. =
+Because=20
+              it uses the     SSL session ID associated with the =
+physical=20
+              client-server connection there     are some limitations. =
+They are:=20
+                 =20
+              <UL>
+                <LI>Tomcat must have a connector with the attribute      =
+    =20
+                <STRONG>isSecure</STRONG> set to <CODE>true</CODE>.</LI>
+                <LI>If SSL connections are managed by a proxy or a =
+hardware=20
+                accelerator          they must populate the SSL request =
+headers=20
+                (see the           <A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/config/valve.html">SSLVal=
+ve</A>)=20
+                so that          the SSL session ID is visible to =
+Tomcat.</LI>
+                <LI>If Tomcat terminates the SSL connection, it will not =
+be=20
+                possible to use          session replication as the SSL =
+session=20
+                IDs will be different on each          node.</LI></UL>
+              <P></P>
+              <P>    To enable SSL session tracking you need to use a =
+context=20
+              listener to set the    tracking mode for the context to be =
+just=20
+              SSL (if any other tracking mode is    enabled, it will be =
+used in=20
+              preference). It might look something like:    =20
+              <DIV class=3D"codeBox">
+<PRE><CODE>=0A=
+package org.apache.tomcat.example;=0A=
+=0A=
+import java.util.EnumSet;=0A=
+=0A=
+import javax.servlet.ServletContext;=0A=
+import javax.servlet.ServletContextEvent;=0A=
+import javax.servlet.ServletContextListener;=0A=
+import javax.servlet.SessionTrackingMode;=0A=
+=0A=
+public class SessionTrackingModeListener implements =
+ServletContextListener {=0A=
+=0A=
+    @Override=0A=
+    public void contextDestroyed(ServletContextEvent event) {=0A=
+        // Do nothing=0A=
+    }=0A=
+=0A=
+    @Override=0A=
+    public void contextInitialized(ServletContextEvent event) {=0A=
+        ServletContext context =3D event.getServletContext();=0A=
+        EnumSet&lt;SessionTrackingMode&gt; modes =3D=0A=
+            EnumSet.of(SessionTrackingMode.SSL);=0A=
+=0A=
+        context.setSessionTrackingModes(modes);=0A=
+    }=0A=
+=0A=
+}=0A=
+    </CODE></PRE></DIV>
+              <P></P>
+              <P>Note: SSL session tracking is implemented for the BIO =
+and NIO=20
+              connectors.     It is not yet implemented for the APR=20
+              connector.</P></BLOCKQUOTE></TD></TR></TBODY></TABLE>
+      <TABLE border=3D"0" cellspacing=3D"0" cellpadding=3D"2">
+        <TBODY>
+        <TR>
+          <TD bgcolor=3D"#525d76"><FONT color=3D"#ffffff" =
+face=3D"arial,helvetica.sanserif"><A=20
+            name=3D"Miscellaneous Tips and Bits"><!--()--></A><A =
+name=3D"Miscellaneous_Tips_and_Bits"><STRONG>Miscellaneous=20
+            Tips and Bits</STRONG></A></FONT></TD></TR>
+        <TR>
+          <TD>
+            <BLOCKQUOTE>
+              <P>To access the SSL session ID from the request, =
+use:<BR><CODE>  =20
+               String sslID =3D=20
+              =
+(String)request.getAttribute("javax.servlet.request.ssl_session_id");=20
+                </CODE> <BR>For additional discussion on this area, =
+please see=20
+              <A=20
+              =
+href=3D"http://bz.apache.org/bugzilla/show_bug.cgi?id=3D22679">Bugzilla</=
+A>.=20
+              </P>
+              <P>To terminate an SSL session, use:    =20
+              <DIV class=3D"codeBox">
+<PRE><CODE>=0A=
+// Standard HTTP session invalidation=0A=
+session.invalidate();=0A=
+=0A=
+// Invalidate the SSL Session=0A=
+org.apache.tomcat.util.net.SSLSessionManager mgr =3D=0A=
+    (org.apache.tomcat.util.net.SSLSessionManager)=0A=
+    request.getAttribute("javax.servlet.request.ssl_session_mgr");=0A=
+mgr.invalidateSession();=0A=
+=0A=
+// Close the connection since the SSL session will be active until the =
+connection=0A=
+// is closed=0A=
+response.setHeader("Connection", "close");=0A=
+    </CODE></PRE></DIV>=20
+                 Note that this code is Tomcat specific due to the use =
+of the   =20
+              SSLSessionManager class. This is currently only available =
+for the=20
+              BIO and    NIO connectors, not the APR/native connector.   =
+
+              <P></P></BLOCKQUOTE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR class=3D"noPrint">
+    <TD width=3D"20%" class=3D"noPrint" nowrap=3D"" valign=3D"top"></TD>
+    <TD width=3D"80%" align=3D"left" valign=3D"top">
+      <TABLE border=3D"0" cellspacing=3D"0" cellpadding=3D"2">
+        <TBODY>
+        <TR>
+          <TD bgcolor=3D"#525d76"><FONT color=3D"#ffffff" =
+face=3D"arial,helvetica.sanserif"><A=20
+            name=3D"comments_section"=20
+            =
+id=3D"comments_section"><STRONG>Comments</STRONG></A></FONT></TD></TR>
+        <TR>
+          <TD>
+            <BLOCKQUOTE>
+              <P class=3D"notice"><STRONG>Notice: </STRONG>This comments =
+section=20
+              collects your suggestions              on improving =
+documentation=20
+              for Apache Tomcat.<BR><BR>              If you have =
+trouble and=20
+              need help, read               <A =
+href=3D"http://tomcat.apache.org/findhelp.html">Find=20
+              Help</A> page              and ask your question on the=20
+              tomcat-users               <A =
+href=3D"http://tomcat.apache.org/lists.html">mailing=20
+              list</A>.              Do not ask such questions here. =
+This is not=20
+              a Q&amp;A section.<BR><BR>              The Apache =
+Comments System=20
+              is explained <A =
+href=3D"http://tomcat.apache.org/tomcat-7.0-doc/comments.html">here</A>. =
+
+                           Comments may be removed by our moderators if =
+they are=20
+              either              implemented or considered=20
+              invalid/off-topic.</P>
+<SCRIPT type=3D"text/javascript"><!--//--><![CDATA[//><!--=0A=
+              var comments_shortname =3D 'tomcat';=0A=
+              var comments_identifier =3D =
+'http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html';=0A=
+              (function(w, d) {=0A=
+                  if (w.location.hostname.toLowerCase() =3D=3D =
+"tomcat.apache.org") {=0A=
+                      d.write('<div id=3D"comments_thread"><\/div>');=0A=
+                      var s =3D d.createElement('script');=0A=
+                      s.type =3D 'text/javascript';=0A=
+                      s.async =3D true;=0A=
+                      s.src =3D =
+'https://comments.apache.org/show_comments.lua?site=3D' + =
+comments_shortname + '&page=3D' + comments_identifier;=0A=
+                      (d.getElementsByTagName('head')[0] || =
+d.getElementsByTagName('body')[0]).appendChild(s);=0A=
+                  }=0A=
+                  else {=0A=
+                      d.write('<div =
+id=3D"comments_thread"><strong>Comments are disabled for this page at =
+the moment.<\/strong><\/div>');=0A=
+                  }=0A=
+              })(window, document);=0A=
+              //--><!]]></SCRIPT>
+            </BLOCKQUOTE></TD></TR></TBODY></TABLE></TD></TR><!--FOOTER =
+SEPARATOR-->
+  <TR>
+    <TD colspan=3D"2">
+      <HR size=3D"1" noshade=3D"">
+    </TD></TR><!--PAGE FOOTER-->
+  <TR>
+    <TD colspan=3D"2">
+      <DIV align=3D"center"><FONT color=3D"#525d76" size=3D"-1"><EM>     =
+   Copyright=20
+      =A9 1999-2015, Apache Software Foundation        =20
+  </EM></FONT></DIV></TD></TR></TBODY></TABLE></BODY></HTML>
+
+------=_NextPart_000_0000_01D15902.FD363590
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://tomcat.apache.org/tomcat-7.0-doc/images/tomcat.gif
+
+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
+vcIFyY1JnGOUBiEEADs=
+
+------=_NextPart_000_0000_01D15902.FD363590
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://tomcat.apache.org/tomcat-7.0-doc/images/asf-logo.gif
+
+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
+
+------=_NextPart_000_0000_01D15902.FD363590--
