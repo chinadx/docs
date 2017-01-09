@@ -64,3 +64,9 @@ body {
 .entry-title, .page-title, .site-title, .entry-content, .entry-excerpt, .clearfix {
 	font-family:"Microsoft Yahei Light";
 }
+
+8.数据库优化
+
+WordPress系统使用时间长了，数据库中的冗余数据就会很多，定期优化和清理Wordpress的数据库，可以保证Wordpress能够快速工作。
+
+推荐一款数据库的优化插件：WP-Optimize插件，其具体功能为：删除修改后的WordPress中的冗余数据，删除所有评论中的垃圾数据，删除无效的留言，优化MySQL数据库等等。
