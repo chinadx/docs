@@ -1,0 +1,66 @@
+1.安装
+	使用docker安装 docker pull wordpress
+
+2.启动
+	启动 docker run --name nestnews -e WORDPRESS_DB_HOST=xxx -e WORDPRESS_DB_USER=xxx -e WORDPRESS_DB_PASSWORD=xxxx -e WORDPRESS_DB_NAME=xx -P -d wordpress
+
+3.配置nginx转发
+	server
+{
+    listen 80;
+    server_name yourdomain;
+    index index.html index.htm;
+    root /data/wwwroot/default/;
+
+    location ^~ / {
+        proxy_pass http://ip:port;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_redirect off;
+    }
+}
+
+4.使用域名或IP进入站点，运行install
+
+5.使用主题 GridBox
+
+6.安装插件Super Static Cache
+
+7.自定义css
+/*
+ * 更改顶部底色
+ */
+.site-header {
+    background: #4477aa;
+}
+
+/*
+ * 更改底部底色
+ */
+.footer-wrap {
+    background: #4477aa;
+}
+
+/*
+ * 将底部的powered by 去掉
+ * powered by 那一行字的css类是 credit-link
+ * 整个footer的类是site-info
+ */
+.site-info {
+	display: none;
+}
+
+/*
+ * 修改全局字体为雅黑
+ */
+body {
+    font-family:"Microsoft Yahei ",Arial,Verdana,arial,serif,sans-serif;
+}
+
+/*
+ * 修改文章标题字体
+ */
+.entry-title, .page-title, .site-title, .entry-content, .entry-excerpt, .clearfix {
+	font-family:"Microsoft Yahei Light";
+}
